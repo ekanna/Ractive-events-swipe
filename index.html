@@ -1,0 +1,47 @@
+
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+		<title>Swipe Example</title>
+		<style type="text/css">
+			body
+			{
+				font-family: Helvetica, san-serif;
+				text-align: center;
+				font-size:24px;
+			}
+			div { padding: 128px 0 0 0; }
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<script type="text/ractive" id="touchT">
+			<div on-swipeLeft="kanna" id="swipeBox" style="position:relative;width:100%;height:100%;">
+				<p>Swipe the page with one finger to change the background color</p>
+				<p>LEFT = ORANGE</p>
+				<p>RIGHT = GREEN</p>
+				<p>UP = MAROON</p>
+				<p>DOWN = PURPLE</p>
+			</div>
+		</script>
+		<script src="./Ractive.min.js"></script>
+		<script src="./Ractive-events-swipe.js"></script>
+		<script>
+			var ractive = new Ractive({
+				el: '#container',
+				template: '#touchT',
+				data : {
+					name: 'koti',
+				}
+			});
+			ractive.on({
+				kanna: function(e){
+					console.log('hi kanna')
+					console.log(e.direction)
+				}
+			})	
+		</script>
+	</body>
+</html>
+

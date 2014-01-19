@@ -21,67 +21,82 @@
 
 }(typeof window !== 'undefined' ? window : this, function (Ractive) {
 
-    'use strict';
-    var swipe = function (node, fire) {
-        var touchstart = function (event) {
+   'use strict';
+	var makeSwipeDefinition = function (direction){
+		return function (node, fire) {
+		var chinna = function (event) {
+			var sx, sy, ex, ey, currentTarget;
+			console.log('start')
+			event.preventDefault();
+			if (event.touches.length !== 1) { // no.of.fingers != 1
+				 cancel();
+				 return;
+			}
 
-            event.preventDefault();
-            if (event.touches.length !== 1) {
-                return;
-            }
+			var touch = event.touches[0];
 
-            var touch = event.touches[0];
+			sx = touch.pageX;
+			sy = touch.pageY;
+			currentTarget = this;
 
-            var sx = touch.pageX;
-            var sy = touch.pageY;
-            var ex, ey;
-            var currentTarget = this;
-            var finger = touch.identifier;
+			function move(event) {
+				 event.preventDefault();
+				 if (event.touches.length !== 1) { 
+						console.log('mutiple fingers')
+					  cancel();
+				 }
+				 var touch = event.touches[0];
+				 ex = touch.pageX;
+				 ey = touch.pageY;
+			};
 
-            var move = function (event) {
-                event.preventDefault();
-                if (event.touches.length !== 1 || event.touches[0].identifier !== finger) {
-                    cancel();
-                }
-                var touch = event.touches[0];
-                ex = touch.pageX;
-                ey = touch.pageY;
-            };
+			function end(event) {
+				 event.preventDefault();
+				 console.log('end')
+				 var dx = ex - sx;
+				 var dy = ey - sy;
+				 var ax = Math.abs(dx);
+				 var ay = Math.abs(dy);
+				 if (Math.max(ax, ay) > 20) {
+					  var swipeDirection = ax > ay ? (dx < 0 ? 'swipeleft' : 'swiperight') : (dy < 0 ? 'swipeup' : 'swipedown')
+						if (swipeDirection == direction) {
+						  fire({
+								node: currentTarget,
+								original: event,
+								direction: swipeDirection,
+						  });
+					  }
+				 }
+				 cancel();
+			}
 
-            var end = function (event) {
-                event.preventDefault();
-                console.log('end')
-                var dx = ex - sx;
-                var dy = ey - sy;
-                var ax = Math.abs(dx);
-                var ay = Math.abs(dy);
-                if (Math.max(ax, ay) > 20) {
-                    var swipeDirection = ax > ay ? (dx < 0 ? 'swipeleft' : 'swiperight') : (dy < 0 ? 'swipeup' : 'swipedown')
-                    fire({
-                        node: currentTarget,
-                        original: event,
-                        direction: swipeDirection,
-                    });
-                }
-                cancel();
-            }
-
-            var cancel = function () {
-                node.removeEventListener('touchend', end, false);
-                window.removeEventListener('touchmove', move, false);
-                window.removeEventListener('touchcancel', cancel, false);
-            };
-
-            node.addEventListener('touchend', end, false);
-            window.addEventListener('touchmove', move, false);
-            window.addEventListener('touchcancel', cancel, false);
-        };
-        node.addEventListener('touchstart', touchstart, false);
-        return {
-            teardown: function () {
-                node.removeEventListener('touchstart', touchstart, false);
-            }
-        };
-    }
-    Ractive.events.swipe = swipe;
+			function cancel() {
+				 node.removeEventListener('touchend', end, false);
+				 window.removeEventListener('touchend', end, false);
+				 node.removeEventListener('touchmove', move, false);
+				 window.removeEventListener('touchmove', move, false);
+				 node.removeEventListener('touchcancel', cancel, false);
+				 window.removeEventListener('touchcancel', cancel, false);
+			};
+			node.addEventListener('touchmove', move, false);
+			window.addEventListener('touchmove', move, false);
+			node.addEventListener('touchend', end, false);
+			window.addEventListener('touchend', end, false);
+			node.addEventListener('touchcancel', cancel, false);
+			window.addEventListener('touchcancel', cancel, false);
+		}
+      node.addEventListener('touchstart', chinna, false);
+      window.addEventListener('touchstart', chinna, false);
+		return {
+			teardown: function () {
+				node.removeEventListener('touchstart', chinna, false);
+				window.removeEventListener('touchstart', chinna, false);
+			}
+		};
+	}
+	var events = Ractive.events;
+   events.swipeLeft = makeSwipeDefinition('swipeLeft');
+   events.swipeRight = makeSwipeDefinition('swipeRight');
+   events.swipeUp = makeSwipeDefinition('swipeUp');
+   events.swipeDown = makeSwipeDefinition('swipeDown');
 }));
