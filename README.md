@@ -6,7 +6,7 @@ Swipe events for Ractivejs
 ##### Template
 ```
 <script type="text/ractive" id="touchT">
-	<div id="swipe" on-swipeLeft="left" on-swipeRight="right" on-swipeUp="up" on-swipeDown="down">
+	<div id="swipe" on-swipeleft="left" on-swiperight="right" on-swipeup="up" on-swipedown="down">
 		<h1>{{direction}}</h1>
 	</div>
 </script>

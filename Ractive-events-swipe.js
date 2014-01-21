@@ -56,7 +56,7 @@
 					 var ax = Math.abs(dx);
 					 var ay = Math.abs(dy);
 					 if (Math.max(ax, ay) > 20) {
-						  var swipeDirection = ax > ay ? (dx < 0 ? 'swipeLeft' : 'swipeRight') : (dy < 0 ? 'swipeUp' : 'swipeDown')
+						  var swipeDirection = ax > ay ? (dx < 0 ? 'swipeleft' : 'swiperight') : (dy < 0 ? 'swipeup' : 'swipedown')
 							if (swipeDirection == direction) {
 							  fire({
 									node: currentTarget,
@@ -94,8 +94,8 @@
 		}
 	}
 	var events = Ractive.events;
-	events.swipeLeft = makeSwipeDefinition('swipeLeft');
-	events.swipeRight = makeSwipeDefinition('swipeRight');
-	events.swipeUp = makeSwipeDefinition('swipeUp');
-	events.swipeDown = makeSwipeDefinition('swipeDown');
+	events.swipeleft = makeSwipeDefinition('swipeleft');
+	events.swiperight = makeSwipeDefinition('swiperight');
+	events.swipeup = makeSwipeDefinition('swipeup');
+	events.swipedown = makeSwipeDefinition('swipedown');
 }));
