@@ -1,14 +1,14 @@
 {
   "name": "Ractive-events-swipe",
   "main": "Ractive-events-swipe.js",
-  "version": "0.0.0",
+  "version": "v0.0.1",
   "homepage": "https://github.com/ekanna/Ractive-events-swipe",
   "authors": [
     "koti <koti@ekanna.com>"
   ],
   "description": "Signle finger swipe events for Ractive",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "ignore": [
     "**/.*",
     "node_modules",
